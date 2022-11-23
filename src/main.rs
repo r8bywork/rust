@@ -4,6 +4,8 @@ use std::io::{BufReader, Write, BufRead, ErrorKind};
 use rand::Rng;
 use std::fs::File;
 use std::cmp::Ordering;
+use std::ops::Add;
+use std::collections::HashMap;
 
 fn readIo() {
   println!("What is your name?");
@@ -226,10 +228,81 @@ fn sumList(list: &[i32]) -> i32{
   // println!("Sum of list = {}", sumList(&num1));
 }
 
-// fn get_sum_generic<T>(x: T, y: T) -> T {
-//   return x+y;
-// }
+fn get_sum_generic<T:Add<Output = T>>(x: T, y: T) -> T {
+  return x+y;
+}
+
+fn ownership() {
+  let str1 = String::from("world!");
+  // let str2 = str1; str1 will be delete
+  let str2 = str1.clone();
+  println!("Hello {}", str1);
+}
+
+fn hashMaps() {
+  let mut heroes = HashMap::new();
+  heroes.insert("SuperMan", "Clark Kent");
+  heroes.insert("Batman", "Bruce Wayne");
+  heroes.insert("The Flash", "Barry Allen");
+
+  for (k,v) in heroes.iter() {
+    println!("Key: {} = Value: {}", k, v);
+  }
+
+  if heroes.contains_key("Batman") {
+    let the_batman = heroes.get("Batman");
+    match the_batman {
+      Some(x) => println!("Batman here!"),
+      None => println!("No Batman here!"),
+    }
+  }
+}
+
+fn structure () {
+  const PI:f32 = 3.141592;
+  trait Shape {
+    fn new(length: f32, width:f32) -> Self;
+    fn area(&self) -> f32;
+  }
+
+  struct Rectangle {length: f32, width: f32};
+  struct Circle {length: f32, width: f32};
+
+  impl Shape for Rectangle {
+    fn new(length: f32,width:f32) -> Rectangle{
+      return Rectangle{length, width};
+    }
+    fn area(&self) -> f32{
+      return self.length * self.width;
+    }
+  }
+  impl Shape for Circle {
+    fn new(length: f32,width:f32) -> Circle{
+      return Circle{length, width};
+    }
+    fn area(&self) -> f32{
+      return (self.length / 2.0).powf(2.0) * PI;
+    }
+  }
+
+  let rec: Rectangle = Shape::new(10.0, 10.0); 
+  let cir: Circle = Shape::new(10.0, 10.0); 
+  println!("Rec area {}", rec.area());
+  println!("Circle area {}", cir.area());
+
+  // struct Customer{
+  //   name: String,
+  //   address: String,
+  //   balance: f32,
+  // }
+  // let mut bob = Customer{
+  //   name: String::from("Bob"),
+  //   address: String::from("London"),
+  //   balance: 100.0,
+  // };
+  // bob.address = String::from("Germany");
+}
 
 fn main() {
-
+  structure();
 }
