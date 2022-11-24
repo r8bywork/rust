@@ -303,4 +303,48 @@ pub mod rustLib {
     // };
     // bob.address = String::from("Germany");
   }
+
+  pub fn errorHadle() {
+    let path = "lines.txt";
+    let output = File::create(path);
+    let mut output = match output {
+      Ok(file) => file,
+      Err(error) => { 
+        panic!("Could not create {}: {}", path, error);
+      }
+    };
+    write!(output,"Just some\nRandom words.").expect("Failed to write to file");
+    let input = File::open(path).unwrap();
+    let buffered = BufReader::new(input);
+    for line in buffered.lines() {
+      println!("{}", line.unwrap());
+    }
+  
+    let output2 = File::create("rand.txt");
+    let mut output2 = match output2 {
+      Ok(file) => file,
+      Err(error) => match error.kind() {
+        ErrorKind::NotFound => panic!("file not found: {}", error),
+        _ => {
+          panic!("Could not create rand.txt: {}", error);
+        }
+      }
+    };
+    write!(output2, "Hello\n,\nworld!").expect("Failed to write rand.txt");
+    let mut input2 = File::open("rand.txt").unwrap();
+    let buffered2 = BufReader::new(input2);
+    for line2 in buffered2.lines() {
+      println!("{}", line2.unwrap());
+    }
+  }
+  pub fn closure() {
+    fn use_Func<T> (a: i32, b: i32, func: T) -> i32 
+    where T: Fn(i32, i32) -> i32 {
+      func(a,b)
+    }
+    let sum = |a: i32, b: i32| a+b;
+    let prod = |a: i32, b: i32| a*b;
+    println!("{}", use_Func(2, 3, sum));
+    println!("{}", use_Func(2, 3, prod));
+  }
 }
