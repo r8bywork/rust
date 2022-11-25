@@ -75,7 +75,7 @@ pub mod rustLib {
     let arr = [1,2,3,4,5,6,7,8,9];
     let mut loop_idx = 0;
     println!("For loop: ");
-    for val in arr.iter(){
+    for val in arr.iter() {
       println!("For loop: {}", val);
     }
   
@@ -337,6 +337,7 @@ pub mod rustLib {
       println!("{}", line2.unwrap());
     }
   }
+  
   pub fn closure() {
     fn use_Func<T> (a: i32, b: i32, func: T) -> i32 
     where T: Fn(i32, i32) -> i32 {
@@ -347,4 +348,38 @@ pub mod rustLib {
     println!("{}", use_Func(2, 3, sum));
     println!("{}", use_Func(2, 3, prod));
   }
+
+  pub fn tree(){
+    #[derive(Debug)]
+    struct TreeNode<T> {
+      pub left: Option<Box<TreeNode<T>>>, 
+      pub right: Option<Box<TreeNode<T>>>,
+      pub key: T,
+    }
+    impl<T> TreeNode<T> {
+      pub fn new(key:T) -> Self{
+        TreeNode {
+          left: None,
+          right: None,
+          key,
+        }
+      }
+      pub fn left(mut self, node: TreeNode<T>) -> Self {
+        self.left = Some(Box::new(node));
+        self
+      }
+      pub fn right(mut self, node: TreeNode<T>) -> Self {
+        self.right = Some(Box::new(node));
+        self
+      }
+    }
+  
+    let node1 = TreeNode::new(1)
+      .left(TreeNode::new(2))
+      .right(TreeNode::new(3))
+      .left(TreeNode::new(5));
+  
+    println!("{:#?}", node1);
+  }
+
 }
